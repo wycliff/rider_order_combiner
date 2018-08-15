@@ -7,6 +7,7 @@ package tsp;
 
 import com.sun.xml.internal.ws.encoding.MtomCodec;
 import java.util.Stack;
+import sun.rmi.runtime.Log;
 
 /**
  *
@@ -19,7 +20,10 @@ public class OrderCombiner {
             lat_drop_ff1,long_drop_ff1, // drop off for pick up 1
             lat_drop_ff2, long_drop_ff2; // drop off for pick up 2
     
-    double radius = 4.0;
+    double radius = 3.5;
+    
+  
+  
     
     // parametarised constructor
     public OrderCombiner(double lat_pick_up1, double long_pick_up1, double lat_pick_up2 , double long_pick_up2,
@@ -42,14 +46,13 @@ public class OrderCombiner {
        long_drop_ff2 = this.long_drop_ff2;
     }
     
+    
     // constructor
     public OrderCombiner(){
     
     }
     
-    
-    
-    public  void determiner(double lat_pick_up1, double long_pick_up1, double lat_pick_up2 , double long_pick_up2,
+    public void determiner(double lat_pick_up1, double long_pick_up1, double lat_pick_up2 , double long_pick_up2,
            double lat_drop_ff1,double long_drop_ff1, double lat_drop_ff2, double long_drop_ff2){
     
         // Get distance between pickups , then 
@@ -62,6 +65,7 @@ public class OrderCombiner {
         
             if(dist_drop_offs <radius){
             
+            
             System.out.println("The orders are combinable: \n ");
             System.out.println("Radius: \n " + radius );
             System.out.println("distance between pickups: \t " + dist_pick_ups);
@@ -69,8 +73,13 @@ public class OrderCombiner {
             
             /*
             Then return an adjacency matrix to be passed to TSP
-            */
-            
+            */  
+            }
+            else{
+            System.out.println("The orders are not combinable");
+            System.out.println("Radius: \n " + radius );
+            System.out.println("distance between pickups: \t " + dist_pick_ups);
+            System.out.println("distance between drop-offs: \t " + dist_drop_offs);
             }
         }
         
@@ -82,7 +91,7 @@ public class OrderCombiner {
             System.out.println("distance between drop-offs: \t " + dist_drop_offs);
         }
         
-//    return null;
+    // return dist_pick_ups;
     }
    
     
@@ -93,7 +102,7 @@ public class OrderCombiner {
  */
     
 public static double distance(double lat1, double lat2, double lon1,
-        double lon2  ) {
+        double lon2) {
 
     final int R = 6371; // Radius of the earth
 
@@ -113,17 +122,15 @@ public static void main(String... arg)
     {
         
          // Points
-        double lat_x = 44.968046  , long_x= -94.420307,
-               lat_w = 44.33328   , long_w= -89.132008,
+        double lat_x = 44.928046  , long_x= -94.410307,
+               lat_w = 44.903280  , long_w= -94.392008,
                 
-               lat_y = 33.755787  , long_y= -116.359998,
-               lat_z = 33.844843  , long_z= -116.54911 ;
+               lat_y = 33.695787  , long_y= -116.359998,
+               lat_z = 33.675843  , long_z= -116.34911 ;
         
         OrderCombiner orderCombiner = new OrderCombiner();
-        
         orderCombiner.determiner(lat_x, long_x, lat_w, long_w, lat_y, long_y, lat_z, long_z);
-        
-        
+                
     }
   
 }

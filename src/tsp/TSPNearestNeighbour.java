@@ -69,7 +69,7 @@ public class TSPNearestNeighbour {
       
         
         try
-        {     
+        {        
             System.out.println("Enter the number of nodes in the graph");
             scanner = new Scanner(System.in);
             number_of_nodes = scanner.nextInt();
