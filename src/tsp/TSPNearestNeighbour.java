@@ -1,6 +1,7 @@
 
 package tsp;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Stack;
@@ -19,14 +20,17 @@ public class TSPNearestNeighbour {
         stack = new Stack<Integer>();
     }
  
-    public void tsp(int adjacencyMatrix[][])
+    public void tsp(double adjacencyMatrix[][])
     {
-        numberOfNodes = adjacencyMatrix[1].length - 1;
+        numberOfNodes = adjacencyMatrix[1].length - 1; //
         int[] visited = new int[numberOfNodes + 1];
+        
         visited[1] = 1;
         stack.push(1);
         int element, dst = 0, i;
-        int min = Integer.MAX_VALUE;
+        //int min = Integer.MAX_VALUE;
+        double min = Double.MAX_VALUE;
+        
         boolean minFlag = false;
         System.out.print(1 + "\t");
  
@@ -35,6 +39,7 @@ public class TSPNearestNeighbour {
             element = stack.peek();
             i = 1;
             min = Integer.MAX_VALUE;
+            
             while (i <= numberOfNodes)
             {
                 if (adjacencyMatrix[element][i] > 1 && visited[i] == 0)
@@ -48,6 +53,7 @@ public class TSPNearestNeighbour {
                 }
                 i++;
             }
+            
             if (minFlag)
             {
                 visited[dst] = 1;
@@ -64,50 +70,76 @@ public class TSPNearestNeighbour {
     public static void main(String... arg)
     {
         int number_of_nodes;
-        Scanner scanner = null;
+        //Scanner scanner = null;
+       
+      try
+        {   
+      //======= From Order Combination
         
-      
-        
-        try
-        {        
-            System.out.println("Enter the number of nodes in the graph");
-            scanner = new Scanner(System.in);
-            number_of_nodes = scanner.nextInt();
+               OrderCombiner orderCombiner = new OrderCombiner();
+                        
+               // ============== Calling necessary methods      
+                ArrayList<LatLong> nodes = new ArrayList<>();
+                
+                nodes = orderCombiner.determiner(); //Determines combinable, returns combinable nodes
+                number_of_nodes = nodes.size();
+                
+                System.out.println("number of nodes  " + nodes.size());
+                
+                double adjacency_matrix[][] = new double[number_of_nodes + 1][number_of_nodes + 1];
+                double adjacency_matrix2[][] = new double[number_of_nodes + 1][number_of_nodes + 1];
+               
+                
+               // ========================
+                adjacency_matrix  = orderCombiner.adjacencyMaker(nodes);
+                
+               // Reading from the 2D matrix
+                 for(int i = 0 ; i <nodes.size() ; i++){
+
+                     for(int j = 0 ; j<nodes.size() ; j++){
+                         
+                     System.out.println(adjacency_matrix[i][j]);
+                   
+                     }
+                 }
+                 
+      //==================================  
+               
+          // Accepting the adjacency matrix
             
-            int adjacency_matrix[][] = new int[number_of_nodes + 1][number_of_nodes + 1];
-            System.out.println("Enter the adjacency matrix");
-            
-            for (int i = 1; i <= number_of_nodes; i++)
+            for (int i = 1; i <= number_of_nodes; i++) // rows 
             {
-                for (int j = 1; j <= number_of_nodes; j++)
+                for (int j = 1; j <= number_of_nodes; j++) // columns
                 {
-                    adjacency_matrix[i][j] = scanner.nextInt();
-                    //Say
-//                    OrderCombiner orderCombiner = new OrderCombiner();
-//                    adjacency_matrix[i][j] = orderCombiner.determiner(j, j, j, j);
+                    adjacency_matrix2[i][j] = adjacency_matrix[i-1][j-1];
+                    
+                    
                 }
             }
-            
+     
             
             for (int i = 1; i <= number_of_nodes; i++)
             {
                 for (int j = 1; j <= number_of_nodes; j++)
                 {
-                    if (adjacency_matrix[i][j] == 1 && adjacency_matrix[j][i] == 0)
+                    if (adjacency_matrix2[i][j] == 1 && adjacency_matrix2[j][i] == 0)
                     {
-                        adjacency_matrix[j][i] = 1;
+                        adjacency_matrix[j][i] = 1.0;
+                       
                     }
                 }
             }
+           
+                  
             System.out.println("the locations are visited as follows");
             TSPNearestNeighbour tspNearestNeighbour = new TSPNearestNeighbour();
-            tspNearestNeighbour.tsp(adjacency_matrix);
+            tspNearestNeighbour.tsp(adjacency_matrix2);
             
         } catch (InputMismatchException inputMismatch)
          {
              System.out.println("Wrong Input format");
          }
-        scanner.close();
+
     }
  
 }
